@@ -1,33 +1,36 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.io.IOException;
+import java.net.URL;
 
 /**
- * Created by Администратор on 09.03.2016.
+ * Created by Aleksander Kasiakin
  */
 public class Game extends Canvas implements Runnable {
 
-    private static final long serialVersionUID = 1L;
+    private boolean running;
 
-    public static final int WIDTH = 160;
-    public static final int HEIGHT = WIDTH / 12 * 9;
-    public static final int SCALE = 3;
-    public static final String NAME = "Game";
+    public static int WIDTH = 400;
+    public static int HEIGHT = 300;
+    public static String NAME = "Tanks";
+
+    public Sprite hero;
+    private static int x = 0;
+    private static int y = 0;
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
 
     private JFrame frame;
 
-    public boolean running = false;
-    public int tickCount = 0;
-
-    private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_BGR);
-    private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-
     public Game() {
-        setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setMaximumSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         frame = new JFrame(NAME);
         frame.setLayout(new BorderLayout());
@@ -40,19 +43,16 @@ public class Game extends Canvas implements Runnable {
         frame.setVisible(true);
     }
 
-    private synchronized void start() {
+    public void start() {
         running = true;
         new Thread(this).start();
-
-    }
-
-    private synchronized void stop() {
-        running = false;
     }
 
     public void run() {
         long lastTime = System.nanoTime();
-        double nsPerTick = 1000000000D / 60D;
+        double nsPerTick = 1000000000D / 60D; //60 кадров в секунду
+
+        init();
 
         int ticks = 0;
         int frames = 0;
@@ -69,7 +69,7 @@ public class Game extends Canvas implements Runnable {
 
             while (delta >= 1) {
                 ticks++;
-                tick();
+//                tick();
                 delta -= 1;
                 shouldRender = true;
             }
@@ -83,6 +83,7 @@ public class Game extends Canvas implements Runnable {
             if (shouldRender) {
                 frames++;
                 render();
+                update();
             }
 
             if (System.currentTimeMillis() - lastTimer >= 1000) {
@@ -94,25 +95,77 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public void tick() {
-        tickCount++;
-
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = i + tickCount;
-        }
+    public void init() {
+        hero = getSprite("sprite.png");
+        addKeyListener(new KeyInputHandler());
     }
 
     public void render() {
         BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
-            createBufferStrategy(3);
+            createBufferStrategy(2);
+            requestFocus();
             return;
         }
 
         Graphics g = bs.getDrawGraphics();
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        g.setColor(Color.black);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        hero.draw(g, x, y);
         g.dispose();
         bs.show();
+    }
+
+    public void update() {
+
+        if (leftPressed == true) {
+            x--;
+            if (x <= 0) {
+                x = 0;
+            }
+        }
+        if (rightPressed == true) {
+            x++;
+            if (x >= WIDTH) {
+                x = WIDTH;
+            }
+        }
+    }
+
+    public Sprite getSprite(String imageName) {
+        BufferedImage sourceImage = null;
+
+        try {
+            URL url = this.getClass().getClassLoader().getResource(imageName);
+            sourceImage = ImageIO.read(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Sprite sprite = new Sprite(Toolkit.getDefaultToolkit().createImage(sourceImage.getSource()));
+
+        return sprite;
+    }
+
+    public class KeyInputHandler extends KeyAdapter {
+
+        public void keyPressed(KeyEvent e) { //клавиша нажата
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                leftPressed = true;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                rightPressed = true;
+            }
+        }
+
+        public void keyReleased(KeyEvent e) { //клавиша отпущена
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                leftPressed = false;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                rightPressed = false;
+            }
+        }
     }
 
     public static void main(String[] args) {
