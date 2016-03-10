@@ -20,10 +20,12 @@ public class Game extends Canvas implements Runnable {
     public static String NAME = "Tanks";
 
     public Sprite hero;
-    private static int x = 0;
-    private static int y = 0;
+    private static int x = WIDTH / 2;
+    private static int y = HEIGHT / 2;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
+    private boolean upPressed = false;
+    private boolean downPressed = false;
 
     private JFrame frame;
 
@@ -118,16 +120,31 @@ public class Game extends Canvas implements Runnable {
 
     public void update() {
 
+        if (rightPressed == true) {
+            x++;
+            if (x >= (WIDTH - hero.getWidth())) {
+                x = WIDTH - hero.getWidth();
+            }
+        }
+
         if (leftPressed == true) {
             x--;
             if (x <= 0) {
                 x = 0;
             }
         }
-        if (rightPressed == true) {
-            x++;
-            if (x >= WIDTH) {
-                x = WIDTH;
+
+        if (upPressed == true) {
+            y++;
+            if (y >= (HEIGHT - hero.getHeight())) {
+                y = HEIGHT - hero.getHeight();
+            }
+        }
+
+        if (downPressed == true) {
+            y--;
+            if (y <= 0) {
+                y = 0;
             }
         }
     }
@@ -156,6 +173,12 @@ public class Game extends Canvas implements Runnable {
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                 rightPressed = true;
             }
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                downPressed = true;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                upPressed = true;
+            }
         }
 
         public void keyReleased(KeyEvent e) { //клавиша отпущена
@@ -164,6 +187,12 @@ public class Game extends Canvas implements Runnable {
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                 rightPressed = false;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                downPressed = false;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                upPressed = false;
             }
         }
     }
