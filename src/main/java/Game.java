@@ -52,7 +52,7 @@ public class Game extends Canvas implements Runnable {
 
     public void run() {
         long lastTime = System.nanoTime();
-        double nsPerTick = 1000000000D / 60D; //60 кадров в секунду
+        double nsPerTick = 1000000000D / 60D; //60 РєР°РґСЂРѕРІ РІ СЃРµРєСѓРЅРґСѓ
 
         init();
 
@@ -168,7 +168,7 @@ public class Game extends Canvas implements Runnable {
 
     public class KeyInputHandler extends KeyAdapter {
 
-        public void keyPressed(KeyEvent e) { //клавиша нажата
+        public void keyPressed(KeyEvent e) { //РєР»Р°РІРёС€Р° РЅР°Р¶Р°С‚Р°
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 leftPressed = true;
             }
@@ -183,7 +183,7 @@ public class Game extends Canvas implements Runnable {
             }
         }
 
-        public void keyReleased(KeyEvent e) { //клавиша отпущена
+        public void keyReleased(KeyEvent e) { //РєР»Р°РІРёС€Р° РѕС‚РїСѓС‰РµРЅР°
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 leftPressed = false;
             }
