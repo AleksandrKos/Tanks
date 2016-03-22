@@ -118,14 +118,14 @@ public class HitBall extends Canvas implements Runnable {
         for (SquareObject currentObject : objectList) {
             g.setColor(currentObject.getObjectColor());
             if (randomElement > 0) {
-                g.fillRect(currentObject.getX(), currentObject.getY(), SQUARE_WIDTH, SQUARE_HEIGHT);
+                g.fillRect(currentObject.getCurrentX(), currentObject.getCurrentY(), SQUARE_WIDTH, SQUARE_HEIGHT);
             }
             if (randomElement < 0) {
-                g.fillOval(currentObject.getX(), currentObject.getY(), SQUARE_WIDTH, SQUARE_HEIGHT);
+                g.fillOval(currentObject.getCurrentX(), currentObject.getCurrentY(), SQUARE_WIDTH, SQUARE_HEIGHT);
             }
             randomElement *= -1;
         }
-        g.fillOval(objectCircle.getX(), objectCircle.getY(), objectCircle.getWIDTH(), objectCircle.getHEIGHT());
+        g.fillOval(objectCircle.getCurrentX(), objectCircle.getCurrentY(), objectCircle.getWIDTH(), objectCircle.getHEIGHT());
         g.dispose();
         bs.show();
     }
@@ -133,20 +133,20 @@ public class HitBall extends Canvas implements Runnable {
     private void update(List<SquareObject> objectList) {
 
         for (SquareObject currentObject : objectList) {
-            if (currentObject.getX() >= directionX || currentObject.getX() < 0) {
+            if (currentObject.getCurrentX() >= directionX || currentObject.getCurrentX() < 0) {
                 currentObject.setDirectionN(currentObject.getDirectionN() * (-1));
             }
-            if (currentObject.getY() >= directionY || currentObject.getY() < 0) {
+            if (currentObject.getCurrentY() >= directionY || currentObject.getCurrentY() < 0) {
                 currentObject.setDirectionM(currentObject.getDirectionM() * (-1));
             }
-            currentObject.setX(currentObject.getX() + stepX * currentObject.getDirectionN());
-            currentObject.setY(currentObject.getY() + stepY * currentObject.getDirectionM());
+            currentObject.setCurrentX(currentObject.getCurrentX() + stepX * currentObject.getDirectionN());
+            currentObject.setCurrentY(currentObject.getCurrentY() + stepY * currentObject.getDirectionM());
         }
     }
 
     private void updateCircle(SquareObject currentObject) {
         angel += 0.07;
-        currentObject.setX((int) (currentObject.getStartX() + currentObject.getHEIGHT() * Math.cos(angel)));
-        currentObject.setY((int) (currentObject.getStartY() + currentObject.getHEIGHT() * Math.sin(angel)));
+        currentObject.setCurrentX((int) (currentObject.getStartX() + currentObject.getHEIGHT() * Math.cos(angel)));
+        currentObject.setCurrentY((int) (currentObject.getStartY() + currentObject.getHEIGHT() * Math.sin(angel)));
     }
 }

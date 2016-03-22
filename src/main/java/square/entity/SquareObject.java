@@ -1,14 +1,9 @@
 package square.entity;
 
-import square.MyColors;
-
-import java.awt.*;
-import java.util.Random;
-
 /**
  * Created by Aleksandr on 18.03.2016.
  */
-public class SquareObject {
+public class SquareObject extends AbstractObject{
 
     private final int HEIGHT;
     private final int WIDTH;
@@ -16,36 +11,13 @@ public class SquareObject {
     private int y;
     private int directionN;
     private int directionM;
-    private int startX;
-    private int startY;
-    private Color objectColor;
 
-    public SquareObject(int height, int widt, int directionX, int directionY) {
-        Random r = new Random();
-        startX = x = r.nextInt(directionX);
-        startY = y = r.nextInt(directionY);
-        HEIGHT = height;
-        WIDTH = widt;
+    public SquareObject(int objectHeight, int objectWidt, int maxX, int maxY) {
+        super(maxX, maxY);
+        HEIGHT = objectHeight;
+        WIDTH = objectWidt;
         directionN = 1;
         directionM =1;
-        MyColors colors = new MyColors();
-        objectColor = colors.getRandomColor();
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
     }
 
     public int getWIDTH() {
@@ -70,21 +42,5 @@ public class SquareObject {
 
     public void setDirectionM(int directionM) {
         this.directionM = directionM;
-    }
-
-    public Color getObjectColor() {
-        return objectColor;
-    }
-
-    public void setObjectColor(Color objectColor) {
-        this.objectColor = objectColor;
-    }
-
-    public int getStartX() {
-        return startX;
-    }
-
-    public int getStartY() {
-        return startY;
     }
 }

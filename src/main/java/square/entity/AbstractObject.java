@@ -1,6 +1,9 @@
 package square.entity;
 
+import square.MyColors;
+
 import java.awt.*;
+import java.util.Random;
 
 /**
  * Created by Aleksandr on 20.03.2016.
@@ -14,9 +17,14 @@ public class AbstractObject {
     protected Color objectColor;
     protected int accelerationFactor;
 
-    public AbstractObject(int startX, int startY) {
-        this.startX = startX;
-        this.startY = startY;
+    public AbstractObject(int maxX, int maxY) {
+        Random r = new Random();
+        startX = currentX = r.nextInt(maxX);
+        System.out.println("x=" + startX);
+        startY = currentY = r.nextInt(maxY);
+        System.out.println("y=" + startY);
+        MyColors colors = new MyColors();
+        objectColor = colors.getRandomColor();
     }
 
     public void setCurrentX(int currentX) {
