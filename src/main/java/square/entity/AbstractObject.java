@@ -3,28 +3,29 @@ package square.entity;
 import square.MyColors;
 
 import java.awt.*;
-import java.util.Random;
 
 /**
  * Created by Aleksandr on 20.03.2016.
  */
 public class AbstractObject {
 
-    protected final int startX;
-    protected final int startY;
-    protected int currentX;
-    protected int currentY;
-    protected Color objectColor;
-    protected int accelerationFactor;
+    private final int OBJECT_HEIGHT;
+    private final int OBJECT_WIDTH;
+    private int currentX;
+    private int currentY;
+    private Color objectColor;
+    private int accelerationFactor;
+    private int directionX;
+    private int directionY;
 
-    public AbstractObject(int maxX, int maxY) {
-        Random r = new Random();
-        startX = currentX = r.nextInt(maxX);
-        System.out.println("x=" + startX);
-        startY = currentY = r.nextInt(maxY);
-        System.out.println("y=" + startY);
+    public AbstractObject(int objectHeight, int objectWidth) {
+        OBJECT_HEIGHT = objectHeight;
+        OBJECT_WIDTH = objectWidth;
         MyColors colors = new MyColors();
         objectColor = colors.getRandomColor();
+        directionX = 1;
+        directionY =1;
+        accelerationFactor = 1;
     }
 
     public void setCurrentX(int currentX) {
@@ -43,14 +44,6 @@ public class AbstractObject {
         this.accelerationFactor = accelerationFactor;
     }
 
-    public int getStartX() {
-        return startX;
-    }
-
-    public int getStartY() {
-        return startY;
-    }
-
     public int getCurrentX() {
         return currentX;
     }
@@ -65,5 +58,29 @@ public class AbstractObject {
 
     public int getAccelerationFactor() {
         return accelerationFactor;
+    }
+
+    public int getDirectionX() {
+        return directionX;
+    }
+
+    public void setDirectionX(int directionX) {
+        this.directionX = directionX;
+    }
+
+    public int getDirectionY() {
+        return directionY;
+    }
+
+    public void setDirectionY(int directionY) {
+        this.directionY = directionY;
+    }
+
+    public int getOBJECT_HEIGHT() {
+        return OBJECT_HEIGHT;
+    }
+
+    public int getOBJECT_WIDTH() {
+        return OBJECT_WIDTH;
     }
 }

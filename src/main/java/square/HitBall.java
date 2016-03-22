@@ -1,5 +1,8 @@
 package square;
 
+import square.action.EquationsOfMotion;
+import square.action.Rotation;
+import square.entity.CircleObject;
 import square.entity.SquareObject;
 
 import javax.swing.*;
@@ -7,6 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Aleksander Kasiakin
@@ -14,23 +18,17 @@ import java.util.List;
 public class HitBall extends Canvas implements Runnable {
 
     private boolean running;
-    private final int AMOUNT_OF_OBJECT = 10;
+    private final int AMOUNT_OF_OBJECT = 20;
 
     private static final int WIDTH = 400;
     private static final int HEIGHT = 300;
-    private static final int SQUARE_WIDTH = 20;
-    private static final int SQUARE_HEIGHT = 20;
-    private static int stepX = 1;
-    private static int stepY = 2;
-    private static int directionX = WIDTH - SQUARE_WIDTH;
-    private static int directionY = HEIGHT - SQUARE_HEIGHT;
+    private final int SQUARE_WIDTH = 20;
+    private final int SQUARE_HEIGHT = 20;
     private List<SquareObject> objectList;
-    private SquareObject objectCircle;
+    private CircleObject objectCircle;
+    private Rotation rotation;
     public static String NAME = "Square";
     private JFrame frame;
-
-    //Для проверки ващения
-    private static double angel = 0;
 
     public HitBall() {
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -86,19 +84,23 @@ public class HitBall extends Canvas implements Runnable {
             if (shouldRender) {
                 render(objectList);
                 update(objectList);
-                updateCircle(objectCircle);
             }
         }
     }
 
     private void init() {
+
         objectList = new ArrayList<SquareObject>();
 
+        Random r = new Random();
         for (int i = 0; i < AMOUNT_OF_OBJECT; i++) {
-            objectList.add(new SquareObject(SQUARE_HEIGHT, SQUARE_WIDTH, directionX, directionY));
+            objectList.add(new SquareObject(SQUARE_HEIGHT, SQUARE_WIDTH));
+            objectList.get(i).setCurrentX(r.nextInt(WIDTH));
+            objectList.get(i).setCurrentY(r.nextInt(HEIGHT));
         }
 
-        objectCircle = new SquareObject(30, 30, 150, 200);
+        objectCircle = new CircleObject(30);
+        rotation = new Rotation(objectCircle, 100, 150, 60, WIDTH, HEIGHT);
     }
 
     private void render(List<SquareObject> objectList) {
@@ -125,7 +127,7 @@ public class HitBall extends Canvas implements Runnable {
             }
             randomElement *= -1;
         }
-        g.fillOval(objectCircle.getCurrentX(), objectCircle.getCurrentY(), objectCircle.getWIDTH(), objectCircle.getHEIGHT());
+        g.fillOval(objectCircle.getCurrentX(), objectCircle.getCurrentY(), objectCircle.getDiameter(), objectCircle.getDiameter());
         g.dispose();
         bs.show();
     }
@@ -133,20 +135,8 @@ public class HitBall extends Canvas implements Runnable {
     private void update(List<SquareObject> objectList) {
 
         for (SquareObject currentObject : objectList) {
-            if (currentObject.getCurrentX() >= directionX || currentObject.getCurrentX() < 0) {
-                currentObject.setDirectionN(currentObject.getDirectionN() * (-1));
-            }
-            if (currentObject.getCurrentY() >= directionY || currentObject.getCurrentY() < 0) {
-                currentObject.setDirectionM(currentObject.getDirectionM() * (-1));
-            }
-            currentObject.setCurrentX(currentObject.getCurrentX() + stepX * currentObject.getDirectionN());
-            currentObject.setCurrentY(currentObject.getCurrentY() + stepY * currentObject.getDirectionM());
+            EquationsOfMotion.linearMotion(currentObject, WIDTH, HEIGHT, 2);
         }
-    }
-
-    private void updateCircle(SquareObject currentObject) {
-        angel += 0.07;
-        currentObject.setCurrentX((int) (currentObject.getStartX() + currentObject.getHEIGHT() * Math.cos(angel)));
-        currentObject.setCurrentY((int) (currentObject.getStartY() + currentObject.getHEIGHT() * Math.sin(angel)));
+        EquationsOfMotion.circleMotion(rotation, 0.01);
     }
 }
