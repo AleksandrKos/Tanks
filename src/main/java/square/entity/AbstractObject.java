@@ -5,6 +5,7 @@ import square.MyColors;
 import java.awt.*;
 
 /**
+ *
  * Created by Aleksandr on 20.03.2016.
  */
 public class AbstractObject {

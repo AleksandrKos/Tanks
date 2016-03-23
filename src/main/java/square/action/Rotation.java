@@ -2,7 +2,9 @@ package square.action;
 
 import square.entity.AbstractObject;
 
-/**
+/**Класс-оболочка для вращающегося объекта. В первую очередь он предназначен для присвоения и хранения координат центра
+ * вращения.
+ *
  * Created by Aleksander Kasiakin on 22.03.2016.
  */
 public class Rotation {
@@ -13,11 +15,21 @@ public class Rotation {
     private int radius;
     private double angel;
 
+    /**
+     * Конструктор без угла, ему присваивается 0
+     * @param currentObject Собственно объект, который будем вращать.
+     * @param centerX Получаем первичную координату Х, потом будем ее проверять и, если надо, корректировать
+     * @param centerY Тоже самое для координаты У
+     * @param radius Радиус вращения
+     * @param mainFieldWidth Ширина основного окна
+     * @param mainFieldHeight Высота основного окна
+     */
     public Rotation(AbstractObject currentObject, int centerX, int centerY, int radius, int mainFieldWidth, int mainFieldHeight) {
         this.currentObject = currentObject;
         this.centerX = centerX;
         this.centerY = centerY;
         this.radius = radius;
+        this.angel = 0;
         validateCenterCoordinates(currentObject, centerX, centerY, radius, mainFieldWidth, mainFieldHeight);
     }
 
@@ -67,6 +79,16 @@ public class Rotation {
         return currentObject;
     }
 
+    /**
+     *Метод проверяет не вылезет ли объект за границы основного окна при вращении в передаваемом центре.
+     *
+     * @param currentObject Собственно объект, который будем вращать. Нужен, чтобы получить его габариты
+     * @param centerX Получаем первичную координату Х, потом будем ее проверять и, если надо, корректировать
+     * @param centerY Тоже самое для координаты У
+     * @param radius Радиус вращения
+     * @param mainFieldWidth Ширина основного окна
+     * @param mainFieldHeight Высота основного окна
+     */
     private void validateCenterCoordinates(AbstractObject currentObject, int centerX, int centerY, int radius, int mainFieldWidth, int mainFieldHeight) {
         if ((centerX + radius + currentObject.getOBJECT_WIDTH()) > mainFieldWidth) {
             this.centerX = mainFieldWidth - radius - currentObject.getOBJECT_WIDTH();
