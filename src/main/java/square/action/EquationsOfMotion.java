@@ -24,4 +24,9 @@ public class EquationsOfMotion {
         rotationObject.getCurrentObject().setCurrentY((int) (rotationObject.getCenterY() + rotationObject.getRadius() * Math.sin(rotationObject.getAngel())));
         rotationObject.setAngel(rotationObject.getAngel() + rotationSpeed);
     }
+
+    public static void setCenterCoordinates(Rotation rotationObject, Rotation parentObject) {
+        rotationObject.setCenterX(parentObject.getCurrentObject().getCurrentX() + parentObject.getCurrentObject().getOBJECT_WIDTH() / 2);
+        rotationObject.setCenterY(parentObject.getCurrentObject().getCurrentY() + parentObject.getCurrentObject().getOBJECT_HEIGHT() / 2);
+    }
 }

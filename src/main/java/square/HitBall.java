@@ -18,7 +18,7 @@ import java.util.Random;
 public class HitBall extends Canvas implements Runnable {
 
     private boolean running;
-    private final int AMOUNT_OF_OBJECT = 20;
+    private final int AMOUNT_OF_OBJECT = 2;
 
     private static final int WIDTH = 400;
     private static final int HEIGHT = 300;
@@ -26,7 +26,9 @@ public class HitBall extends Canvas implements Runnable {
     private final int SQUARE_HEIGHT = 20;
     private List<SquareObject> objectList;
     private CircleObject objectCircle;
+    private CircleObject childCircleObject;
     private Rotation rotation;
+    private Rotation childRotation;
     public static String NAME = "Square";
     private JFrame frame;
 
@@ -100,7 +102,9 @@ public class HitBall extends Canvas implements Runnable {
         }
 
         objectCircle = new CircleObject(30);
+        childCircleObject = new CircleObject(10);
         rotation = new Rotation(objectCircle, 100, 150, 60, WIDTH, HEIGHT);
+        childRotation = new Rotation(childCircleObject, rotation.getCenterX(), rotation.getCenterY(), 20, WIDTH, HEIGHT);
     }
 
     private void render(List<SquareObject> objectList) {
@@ -128,6 +132,7 @@ public class HitBall extends Canvas implements Runnable {
             randomElement *= -1;
         }
         g.fillOval(objectCircle.getCurrentX(), objectCircle.getCurrentY(), objectCircle.getDiameter(), objectCircle.getDiameter());
+        g.fillOval(childCircleObject.getCurrentX(), childCircleObject.getCurrentY(), childCircleObject.getDiameter(), childCircleObject.getDiameter());
         g.dispose();
         bs.show();
     }
@@ -137,6 +142,8 @@ public class HitBall extends Canvas implements Runnable {
         for (SquareObject currentObject : objectList) {
             EquationsOfMotion.linearMotion(currentObject, WIDTH, HEIGHT, 2);
         }
-        EquationsOfMotion.circleMotion(rotation, 0.01);
+        EquationsOfMotion.circleMotion(rotation, 0.03);
+        EquationsOfMotion.setCenterCoordinates(childRotation, rotation);
+        EquationsOfMotion.circleMotion(childRotation, 0.07);
     }
 }
